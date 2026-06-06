@@ -1,0 +1,19 @@
+{
+  "name": "solosuite-assetforge",
+  "version": "1.0.0",
+  "description": "Premium Solopreneur Suite & AI Asset Generator",
+  "main": "src/app.js",
+  "scripts": {
+    "generate": "node scripts/generate_assets.js",
+    "compile": "node scripts/compile_pdf.js",
+    "start": "npx serve src"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "dotenv": "^16.4.5",
+    "pdfkit": "^0.16.0"
+  },
+  "devDependencies": {
+    "serve": "^14.2.3"
+  }
+}

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoloSuite - Herramientas Premium para Freelancers y Creadores</title>
+  <meta name="description" content="Calcula tus tarifas freelance, crea propuestas profesionales y genera correos de venta fría con herramientas gratuitas y plantillas premium para solopreneurs.">
+  <!-- Google Fonts: Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons (CDN para iconos ligeros y estéticos) -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Background Gradients -->
+  <div class="bg-gradient bg-gradient-1"></div>
+  <div class="bg-gradient bg-gradient-2"></div>
+
+  <header class="navbar">
+    <div class="container">
+      <div class="logo">
+        <i data-lucide="zap" class="logo-icon"></i>
+        <span>SoloSuite</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#tools" class="nav-link">Herramientas</a>
+        <a href="#assets" class="nav-link btn-secondary-nav">Recursos Premium</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Hero Section -->
+    <section class="hero">
+      <span class="badge">100% Gratuito & Automatizado</span>
+      <h1>Impulsa tu negocio como <span class="gradient-text">Freelancer</span></h1>
+      <p class="hero-subtitle">Calcula tus tarifas, crea propuestas comerciales ganadoras y genera secuencias de venta fría con nuestras herramientas interactivas. Sin registros y sin complicaciones.</p>
+    </section>
+
+    <!-- Tab Section & Tools -->
+    <section id="tools" class="tools-section">
+      <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchTab('calculator')" id="btn-tab-calculator">
+          <i data-lucide="calculator"></i> Calculadora de Tarifas
+        </button>
+        <button class="tab-btn" onclick="switchTab('proposal')" id="btn-tab-proposal">
+          <i data-lucide="file-text"></i> Creador de Propuestas
+        </button>
+        <button class="tab-btn" onclick="switchTab('emails')" id="btn-tab-emails">
+          <i data-lucide="mail"></i> Emails de Venta
+        </button>
+      </div>
+
+      <!-- TOOL 1: CALCULADORA DE TARIFAS -->
+      <div id="calculator-tool" class="tool-card active">
+        <div class="tool-header">
+          <h2>Calculadora de Tarifas Freelance</h2>
+          <p>Determina exactamente cuánto cobrar por hora y por proyecto para cubrir tus gastos y alcanzar tus metas financieras.</p>
+        </div>
+        
+        <div class="tool-content grid-2">
+          <div class="form-container">
+            <div class="form-group">
+              <label for="calc-personal-expenses">Gastos Personales Mensuales ($)</label>
+              <input type="number" id="calc-personal-expenses" value="1200" placeholder="Alquiler, comida, facturas...">
+            </div>
+            
+            <div class="form-group">
+              <label for="calc-business-expenses">Gastos del Negocio Mensuales ($)</label>
+              <input type="number" id="calc-business-expenses" value="300" placeholder="Software, impuestos, hosting...">
+            </div>
+            
+            <div class="form-group">
+              <label for="calc-annual-savings">Meta de Ahorro Anual ($)</label>
+              <input type="number" id="calc-annual-savings" value="5000" placeholder="Fondos de emergencia, inversiones...">
+            </div>
+
+            <div class="grid-2">
+              <div class="form-group">
+                <label for="calc-weekly-hours">Horas Facturables / Semana</label>
+                <input type="number" id="calc-weekly-hours" value="25" max="60" placeholder="Horas reales cobradas a clientes">
+              </div>
+              <div class="form-group">
+                <label for="calc-vacation-weeks">Semanas Vacaciones / Año</label>
+                <input type="number" id="calc-vacation-weeks" value="4" max="12" placeholder="Tiempo libre no pagado">
+              </div>
+            </div>
+
+            <button onclick="calculateRates()" class="btn-primary" id="btn-calculate">
+              Calcular Tarifa Óptima <i data-lucide="arrow-right"></i>
+            </button>
+          </div>
+
+          <div class="results-container">
+            <div class="result-card highlight">
+              <h3>Tu Tarifa por Hora Sugerida</h3>
+              <div class="result-value" id="result-hourly">$0.00</div>
+              <p>Esta tarifa te permite cubrir gastos, impuestos (calculados al 20%) y tu meta de ahorro anual.</p>
+            </div>
+            
+            <div class="results-grid">
+              <div class="result-subcard">
+                <h4>Ingreso Mensual Necesario</h4>
+                <div class="subcard-value" id="result-monthly-needed">$0.00</div>
+              </div>
+              <div class="result-subcard">
+                <h4>Ingreso Anual Necesario</h4>
+                <div class="subcard-value" id="result-annual-needed">$0.00</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOOL 2: CREADOR DE PROPUESTAS -->
+      <div id="proposal-tool" class="tool-card">
+        <div class="tool-header">
+          <h2>Creador de Propuestas Comerciales</h2>
+          <p>Genera una propuesta comercial estructurada y profesional que convencerá a tu cliente de trabajar contigo.</p>
+        </div>
+
+        <div class="tool-content grid-2">
+          <div class="form-container">
+            <div class="form-group">
+              <label for="prop-client-name">Nombre del Cliente / Empresa</label>
+              <input type="text" id="prop-client-name" value="Acme Corp" placeholder="Ej. Acme Corp">
+            </div>
+
+            <div class="form-group">
+              <label for="prop-project-name">Nombre del Proyecto</label>
+              <input type="text" id="prop-project-name" value="Rediseño Web Corporativo" placeholder="Ej. Desarrollo de Landing Page">
+            </div>
+
+            <div class="form-group">
+              <label for="prop-services">Alcance y Entregables (un elemento por línea)</label>
+              <textarea id="prop-services" rows="4">Diseño de interfaz (Figma)
+Desarrollo en React & CSS a medida
+SEO on-page y optimización de velocidad
+Puesta en producción y hosting</textarea>
+            </div>
+
+            <div class="grid-2">
+              <div class="form-group">
+                <label for="prop-price">Presupuesto Estimado ($)</label>
+                <input type="number" id="prop-price" value="2500" placeholder="Ej. 1500">
+              </div>
+              <div class="form-group">
+                <label for="prop-timeline">Plazo de Entrega</label>
+                <input type="text" id="prop-timeline" value="4 semanas" placeholder="Ej. 3 semanas">
+              </div>
+            </div>
+
+            <button onclick="generateProposal()" class="btn-primary" id="btn-generate-prop">
+              Generar Propuesta <i data-lucide="arrow-right"></i>
+            </button>
+          </div>
+
+          <div class="results-container">
+            <div class="preview-header">
+              <h3>Propuesta Comercial Generada</h3>
+              <button onclick="copyToClipboard('proposal-preview')" class="btn-copy" id="btn-copy-proposal">
+                <i data-lucide="copy"></i> Copiar Texto
+              </button>
+            </div>
+            <div class="preview-box" id="proposal-preview">
+              <!-- El contenido se generará dinámicamente -->
+              Rellena los campos y haz clic en "Generar Propuesta".
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOOL 3: EMAILS DE VENTA -->
+      <div id="emails-tool" class="tool-card">
+        <div class="tool-header">
+          <h2>Generador de Secuencias de Venta Fría</h2>
+          <p>Escribe plantillas de e-mail personalizadas y psicológicamente validadas para captar el interés de nuevos clientes potenciales.</p>
+        </div>
+
+        <div class="tool-content grid-2">
+          <div class="form-container">
+            <div class="form-group">
+              <label for="mail-niche">Tu Especialidad / Servicio</label>
+              <input type="text" id="mail-niche" value="Desarrollo Web con React" placeholder="Ej. Diseño Gráfico, Redacción de Contenidos">
+            </div>
+
+            <div class="form-group">
+              <label for="mail-problem">Problema Común del Cliente</label>
+              <input type="text" id="mail-problem" value="página web lenta que pierde ventas" placeholder="Ej. falta de clientes en redes, web desactualizada">
+            </div>
+
+            <div class="form-group">
+              <label for="mail-benefit">Beneficio Principal que Ofreces</label>
+              <input type="text" id="mail-benefit" value="duplicar la velocidad de carga y subir un 20% la conversión" placeholder="Ej. capturar más leads calificados, automatizar tareas">
+            </div>
+
+            <button onclick="generateEmails()" class="btn-primary" id="btn-generate-mails">
+              Generar Secuencia <i data-lucide="arrow-right"></i>
+            </button>
+          </div>
+
+          <div class="results-container">
+            <div class="preview-header">
+              <h3>Email de Contacto</h3>
+              <button onclick="copyToClipboard('emails-preview')" class="btn-copy" id="btn-copy-emails">
+                <i data-lucide="copy"></i> Copiar Email
+              </button>
+            </div>
+            <div class="preview-box" id="emails-preview">
+              Rellena los campos y haz clic en "Generar Secuencia".
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION ASSETS: NUESTRA MONETIZACIÓN -->
+    <section id="assets" class="assets-section">
+      <div class="section-header">
+        <span class="badge badge-accent">Recursos Premium</span>
+        <h2>Lleva tu negocio al siguiente nivel</h2>
+        <p>Documentos profesionales 100% listos para usar en tus proyectos. Creados por expertos y estructurados legalmente.</p>
+      </div>
+
+      <div class="assets-grid">
+        <!-- Asset 1 -->
+        <div class="asset-card">
+          <div class="asset-icon-box">
+            <i data-lucide="shield-check"></i>
+          </div>
+          <h3>Contrato de Servicios Freelance Completo</h3>
+          <p>La plantilla de contrato definitiva. Protege tu propiedad intelectual, asegura tus pagos y evita problemas de alcance de proyecto con cláusulas sólidas.</p>
+          <div class="asset-price">
+            <span class="price-discount">$19 USD</span>
+            <span class="price-value">$9 USD</span>
+          </div>
+          <a href="#" class="btn-primary btn-block">Descargar Contrato (PDF) <i data-lucide="download"></i></a>
+        </div>
+
+        <!-- Asset 2 -->
+        <div class="asset-card">
+          <div class="asset-icon-box">
+            <i data-lucide="book-open"></i>
+          </div>
+          <h3>Guía de Negocios: De Cero a Freelancer Pro</h3>
+          <p>Aprende las estrategias reales de marketing, contabilidad básica y fijación de precios psicológicos que te permitirán facturar $3k+/mes.</p>
+          <div class="asset-price">
+            <span class="price-discount">$25 USD</span>
+            <span class="price-value">$12 USD</span>
+          </div>
+          <a href="#" class="btn-primary btn-block">Descargar Guía (PDF) <i data-lucide="download"></i></a>
+        </div>
+
+        <!-- Asset 3 -->
+        <div class="asset-card">
+          <div class="asset-icon-box">
+            <i data-lucide="folder-git"></i>
+          </div>
+          <h3>Pack Completo: Plantillas de Gestión Freelance</h3>
+          <p>Un conjunto de plantillas de propuestas de proyecto comerciales, contratos legales, hojas de ruta de clientes y correos de cobro por mora.</p>
+          <div class="asset-price">
+            <span class="price-discount">$39 USD</span>
+            <span class="price-value">$19 USD</span>
+          </div>
+          <a href="#" class="btn-primary btn-block">Descargar Pack Completo <i data-lucide="download"></i></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="logo">
+        <i data-lucide="zap" class="logo-icon"></i>
+        <span>SoloSuite</span>
+      </div>
+      <p>&copy; 2026 SoloSuite. Desarrollado en conjunto con Antigravity. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    // Inicializar iconos de Lucide
+    lucide.createIcons();
+  </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+# Dependencias
+node_modules/
+
+# Archivos de configuración con contraseñas/claves API
+.env
+
+# Archivos temporales o de salida de compilación
+output/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
