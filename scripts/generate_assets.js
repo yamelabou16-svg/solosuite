@@ -17,6 +17,8 @@ const genAI = new GoogleGenerativeAI(apiKey);
 const topic = process.argv[2] || 'Contrato de Desarrollo de Software Freelance';
 console.log(`\n\x1b[36m[AssetForge] Iniciando generación de contenido para:\x1b[0m "${topic}"`);
 
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 async function generateAsset() {
   try {
     // Usar gemini-2.5-flash para generación rápida y económica de texto
@@ -47,12 +49,27 @@ async function generateAsset() {
       - Secciones de firmas y anexos.
     `;
 
-    const result = await model.generateContent([
-      { text: systemPrompt },
-      { text: prompt }
-    ]);
+    let content = '';
+    let retries = 5;
+    let delay = 3000;
+    let success = false;
 
-    const content = result.response.text();
+    while (retries > 0 && !success) {
+      try {
+        const result = await model.generateContent([
+          { text: systemPrompt },
+          { text: prompt }
+        ]);
+        content = result.response.text();
+        success = true;
+      } catch (error) {
+        retries--;
+        if (retries === 0) throw error;
+        console.log(`\n\x1b[33m[AssetForge] El servidor de Gemini está muy ocupado (Error 503/429). Reintentando en ${delay/1000} segundos... (${retries} intentos restantes)\x1b[0m`);
+        await sleep(delay);
+        delay *= 2; // Doblar el tiempo de espera
+      }
+    }
 
     // Crear la carpeta de salida si no existe
     const outputDir = path.join(__dirname, '..', 'output', 'markdown');

@@ -161,7 +161,7 @@ async function compilePDF() {
           item = item.trim();
           if (!item) continue;
           
-          let bullet = '•';
+          let bullet = '• ';
           let itemText = item;
           
           if (item.startsWith('- ')) {
@@ -171,21 +171,15 @@ async function compilePDF() {
           } else {
             const match = item.match(/^(\d+\.)\s(.*)/);
             if (match) {
-              bullet = match[1];
+              bullet = match[1] + ' ';
               itemText = match[2];
             }
           }
           
-          const startX = doc.x;
-          // Dibujar la viñeta/número
-          doc.fillColor(colors.accent).font('Helvetica-Bold').fontSize(10.5);
-          doc.text(bullet, startX + 10, doc.y, { continued: true });
-          
-          // Escribir el texto del item con formato inline
+          // Escribir la viñeta y el texto juntos para evitar desalineaciones y overlapping
           doc.fillColor(colors.text).font('Helvetica').fontSize(10.5);
-          doc.text(' ', { continued: true }); // Espacio de separación
-          
-          renderInlineStyles(doc, itemText, colors);
+          const fullText = bullet + itemText;
+          renderInlineStyles(doc, fullText, colors);
           doc.moveDown(0.3);
         }
         doc.moveDown(0.5);
@@ -259,8 +253,10 @@ function renderInlineStyles(doc, text, colors) {
   parts.forEach((part, index) => {
     const isBold = index % 2 !== 0;
     
+    // Usamos el mismo tipo de letra (Helvetica) para evitar desalineación de caracteres en PDFKit,
+    // pero destacamos las palabras clave en negrita usando el color corporativo Indigo.
     if (isBold) {
-      doc.font('Helvetica-Bold').fillColor(colors.primary);
+      doc.font('Helvetica').fillColor(colors.primary);
     } else {
       // Verificar si es cursiva común del disclaimer final
       if (part.startsWith('*') && part.endsWith('*')) {
@@ -277,11 +273,6 @@ function renderInlineStyles(doc, text, colors) {
       lineGap: 4
     });
   });
-  
-  if (parts.length > 0) {
-    // Forzar el final de línea después de renderizar la última parte
-    doc.text('');
-  }
 }
 
 compilePDF();
