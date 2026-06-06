@@ -119,6 +119,23 @@ async function compilePDF() {
         continue;
       }
 
+      // --- H4 SUBSECTION (#### ) ---
+      if (block.startsWith('#### ')) {
+        const text = block.substring(5).trim();
+        
+        if (doc.y > doc.page.height - doc.page.margins.bottom - 40) {
+          doc.addPage();
+        } else {
+          doc.moveDown(0.8);
+        }
+
+        doc.fillColor(colors.text);
+        doc.font('Helvetica-Bold').fontSize(11);
+        doc.text(text);
+        doc.moveDown(0.4);
+        continue;
+      }
+
       // --- BLOCKQUOTE / CALLOUT (> ) ---
       if (block.startsWith('> ')) {
         const lines = block.split('\n').map(l => l.replace(/^>\s?/, '').trim());
@@ -250,29 +267,44 @@ function renderInlineStyles(doc, text, colors) {
   const sanitizedText = text.replace(/\n/g, ' ');
   const parts = sanitizedText.split('**');
   
-  parts.forEach((part, index) => {
-    const isBold = index % 2 !== 0;
+  // Encontrar el último índice que tiene texto no vacío
+  let lastNonEmptyIndex = parts.length - 1;
+  while (lastNonEmptyIndex >= 0 && parts[lastNonEmptyIndex] === '') {
+    lastNonEmptyIndex--;
+  }
+
+  // Si todo el texto está vacío, no hacemos nada
+  if (lastNonEmptyIndex < 0) return;
+
+  for (let i = 0; i <= lastNonEmptyIndex; i++) {
+    const part = parts[i];
+    const isBold = i % 2 !== 0;
     
-    // Usamos el mismo tipo de letra (Helvetica) para evitar desalineación de caracteres en PDFKit,
-    // pero destacamos las palabras clave en negrita usando el color corporativo Indigo.
     if (isBold) {
-      doc.font('Helvetica').fillColor(colors.primary);
+      doc.font('Helvetica-Bold').fillColor(colors.primary);
     } else {
       // Verificar si es cursiva común del disclaimer final
       if (part.startsWith('*') && part.endsWith('*')) {
         doc.font('Helvetica-Oblique').fillColor(colors.muted);
-        part = part.substring(1, part.length - 1);
       } else {
         doc.font('Helvetica').fillColor(colors.text);
       }
     }
 
-    const isLast = index === parts.length - 1;
-    doc.text(part, {
-      continued: !isLast,
+    // Si es el último elemento que realmente vamos a dibujar, continued es false
+    const isLastRendered = (i === lastNonEmptyIndex);
+    
+    // Si el texto es cursiva y tiene asteriscos, quitar los asteriscos del renderizado
+    let textToDraw = part;
+    if (!isBold && part.startsWith('*') && part.endsWith('*')) {
+      textToDraw = part.substring(1, part.length - 1);
+    }
+
+    doc.text(textToDraw, {
+      continued: !isLastRendered,
       lineGap: 4
     });
-  });
+  }
 }
 
 compilePDF();
